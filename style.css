@@ -102,16 +102,51 @@ button { font: inherit; color: inherit; }
   margin: 14px 0 8px;
 }
 
-/* ──────────────── navigation ──────────────── */
+/* ──────────────── navigation + language switch ──────────────── */
+.masthead-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 0;
+}
 .navbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: baseline;
   gap: 6px 14px;
   padding: 4px 0 6px;
   font-size: 13px;
   letter-spacing: 0.06em;
+  flex: 1;
+}
+.lang-switch {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+.lang-switch button {
+  background: transparent;
+  border: none;
+  padding: 0 2px;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-radius: 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.lang-switch button:hover { color: var(--rust); }
+.lang-switch button.current {
+  color: var(--ink);
+  border-bottom-color: var(--rust);
+  padding-bottom: 1px;
 }
 .navbar a {
   border-bottom: none;
@@ -831,6 +866,8 @@ button { font: inherit; color: inherit; }
   .codex-title-line { font-size: 16px; }
   .clock-face { width: 150px; height: 150px; }
   .navbar { gap: 4px 8px; font-size: 12px; }
+  .lang-switch { font-size: 11px; gap: 4px; }
+  .masthead-bar { gap: 6px; }
   .reading-passage { font-size: 16px; }
   .atelier-desc, .atelier-origin { font-size: 16.5px; }
 }

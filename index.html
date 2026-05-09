@@ -26,15 +26,22 @@
       <span class="masthead-folio" id="folio">fol. —</span>
     </div>
     <hr class="masthead-rule double" />
-    <nav class="navbar" id="navbar" aria-label="primary">
-      <a href="#codex" data-route="codex">codex</a>
-      <span class="nav-bullet" aria-hidden="true">·</span>
-      <a href="#ledger" data-route="ledger">ledger</a>
-      <span class="nav-bullet" aria-hidden="true">·</span>
-      <a href="#rite" data-route="rite">daily rite</a>
-      <span class="nav-bullet" aria-hidden="true">·</span>
-      <a href="#colophon" data-route="colophon">colophon</a>
-    </nav>
+    <div class="masthead-bar">
+      <nav class="navbar" id="navbar" aria-label="primary">
+        <a href="#codex" data-route="codex">codex</a>
+        <span class="nav-bullet" aria-hidden="true">·</span>
+        <a href="#ledger" data-route="ledger">ledger</a>
+        <span class="nav-bullet" aria-hidden="true">·</span>
+        <a href="#rite" data-route="rite">daily rite</a>
+        <span class="nav-bullet" aria-hidden="true">·</span>
+        <a href="#colophon" data-route="colophon">colophon</a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="language">
+        <button type="button" data-locale="en" aria-pressed="true">EN</button>
+        <span class="nav-bullet" aria-hidden="true">·</span>
+        <button type="button" data-locale="it" aria-pressed="false">IT</button>
+      </div>
+    </div>
     <hr class="masthead-rule" />
   </header>
 
@@ -50,6 +57,7 @@
 </div>
 
 <script src="data.js"></script>
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
