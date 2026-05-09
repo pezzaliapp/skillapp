@@ -221,28 +221,492 @@
     container.appendChild(row);
   };
 
-  /* Stub: interactive calibrations are added in a later pass.
-     They render a small notice and a manual fallback. */
-  function stubInteractive(skill, container, onLog) {
-    container.appendChild(el("p", {
-      class: "cal-help",
-      text: "An interactive calibration for this article is being typeset."
-    }));
-    container.appendChild(el("p", {
-      class: "cal-help dim",
-      text: "Until then, perform the test on your own and record the reading manually."
-    }));
-    CALIBRATIONS.manual(
-      Object.assign({}, skill, {
-        calibration: { type: "manual", inputUnit: skill.unit, placeholder: "value" }
-      }),
-      container,
-      onLog
-    );
+  /* small helpers shared by the interactive widgets */
+  function rndInt(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
   }
-  ["mentalMult", "majorSystem", "doomsday", "oneMinute",
-   "clockRead", "pitchInterval", "readingPace", "circleSelfRate"]
-   .forEach(function (k) { CALIBRATIONS[k] = stubInteractive; });
+  function widgetShell(container, opts) {
+    container.classList.add("widget");
+    const root = el("div", { class: "widget-root" });
+    const top = el("p", { class: "cal-help", text: opts.help });
+    container.appendChild(top);
+    container.appendChild(root);
+    return root;
+  }
+  function logRow(container, value, unit, note, onLog) {
+    const row = el("div", { class: "cal-row cal-row-result" });
+    row.appendChild(el("span", { class: "cal-result", text: "result: " + value + " " + unit }));
+    if (note) row.appendChild(el("span", { class: "cal-result-note", text: note }));
+    row.appendChild(el("button", {
+      type: "button", class: "cal-btn", text: "record reading",
+      onclick: function () { onLog(value, note || ""); }
+    }));
+    container.appendChild(row);
+  }
+
+  /* ── I. Mental Multiplication ─────────────────────────────── */
+  CALIBRATIONS.mentalMult = function (skill, container, onLog) {
+    const N = 5;
+    const root = widgetShell(container, {
+      help: "Five problems. Type each answer and press Enter. " +
+            "The clock starts when the first problem is shown."
+    });
+    function gen() {
+      const a = rndInt(11, 99); const b = rndInt(11, 99);
+      return { a: a, b: b, ans: a * b };
+    }
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "begin", type: "button" });
+      begin.addEventListener("click", run);
+      root.appendChild(begin);
+    }
+    function run() {
+      clear(root);
+      const problems = []; for (let i = 0; i < N; i++) problems.push(gen());
+      const start = performance.now();
+      let i = 0; let correct = 0;
+      const stage = el("div", { class: "widget-stage" });
+      const prompt = el("div", { class: "widget-prompt" });
+      const input = el("input", {
+        type: "number", class: "widget-input", autocomplete: "off",
+        inputmode: "numeric", "aria-label": "answer"
+      });
+      const status = el("div", { class: "widget-status" });
+      stage.appendChild(prompt); stage.appendChild(input); stage.appendChild(status);
+      root.appendChild(stage);
+      function show() {
+        const p = problems[i];
+        prompt.textContent = p.a + " × " + p.b + " = ?";
+        status.textContent = "problem " + (i + 1) + " of " + N;
+        input.value = ""; input.focus();
+      }
+      input.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        const v = parseInt(input.value, 10);
+        if (isNaN(v)) return;
+        if (v === problems[i].ans) correct++;
+        i++;
+        if (i >= N) {
+          const elapsed = (performance.now() - start) / 1000;
+          finish(elapsed, correct);
+        } else show();
+      });
+      show();
+      function finish(seconds, correct) {
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: correct + " of " + N + " correct in " + seconds.toFixed(1) + " seconds." }));
+        const value = Math.round(seconds * 10) / 10;
+        const note = correct + "/" + N + " correct";
+        logRow(root, value, skill.unit, note, onLog);
+        const again = el("button", { type: "button", class: "ghost-btn", text: "again",
+          onclick: render });
+        root.appendChild(again);
+      }
+    }
+    render();
+  };
+
+  /* ── II. Major System ─────────────────────────────────────── */
+  CALIBRATIONS.majorSystem = function (skill, container, onLog) {
+    const N = 10;
+    const root = widgetShell(container, {
+      help: "Ten random digits will appear. Study them. When ready, hide them and type the recall."
+    });
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "begin", type: "button",
+        onclick: study });
+      root.appendChild(begin);
+    }
+    let digits = "";
+    function study() {
+      digits = ""; for (let i = 0; i < N; i++) digits += rndInt(0, 9);
+      clear(root);
+      root.appendChild(el("div", { class: "digit-string", text: digits.split("").join("  ") }));
+      root.appendChild(el("p", { class: "cal-help dim",
+        text: "Compose images. When ready, hide and recall." }));
+      const hide = el("button", { class: "cal-btn", text: "hide and recall", type: "button",
+        onclick: recall });
+      root.appendChild(hide);
+    }
+    function recall() {
+      clear(root);
+      root.appendChild(el("p", { class: "cal-help", text: "Type the digits in order." }));
+      const input = el("input", {
+        type: "text", class: "widget-input wide", inputmode: "numeric",
+        autocomplete: "off", "aria-label": "recalled digits"
+      });
+      const submit = el("button", { class: "cal-btn", text: "score", type: "button" });
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") submit.click();
+      });
+      submit.addEventListener("click", function () {
+        const guess = (input.value || "").replace(/\D/g, "").slice(0, N);
+        let correct = 0;
+        for (let i = 0; i < N; i++) if (guess[i] === digits[i]) correct++;
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: correct + " of " + N + " digits in correct positions." }));
+        root.appendChild(el("p", { class: "cal-help dim",
+          text: "shown: " + digits + " · typed: " + (guess || "—") }));
+        logRow(root, correct, skill.unit, "of " + N, onLog);
+        root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+      });
+      root.appendChild(input);
+      root.appendChild(submit);
+      input.focus();
+    }
+    render();
+  };
+
+  /* ── III. Doomsday ────────────────────────────────────────── */
+  CALIBRATIONS.doomsday = function (skill, container, onLog) {
+    const N = 5;
+    const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const root = widgetShell(container, {
+      help: "Five random dates. Choose the weekday. The timer runs across the whole set."
+    });
+    function genDate() {
+      const y = rndInt(1900, 2099);
+      const m = rndInt(1, 12);
+      const dim = new Date(y, m, 0).getDate();
+      const d = rndInt(1, dim);
+      return { y: y, m: m, d: d, dow: new Date(y, m - 1, d).getDay() };
+    }
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "begin", type: "button", onclick: run });
+      root.appendChild(begin);
+    }
+    function run() {
+      clear(root);
+      const set = []; for (let i = 0; i < N; i++) set.push(genDate());
+      let i = 0; let correct = 0;
+      const start = performance.now();
+      const prompt = el("div", { class: "widget-prompt" });
+      const status = el("div", { class: "widget-status" });
+      const buttons = el("div", { class: "dow-buttons" });
+      DAYS.forEach(function (label, idx) {
+        const b = el("button", { type: "button", class: "dow-btn", text: label });
+        b.addEventListener("click", function () {
+          if (idx === set[i].dow) correct++;
+          i++;
+          if (i >= N) finish((performance.now() - start) / 1000, correct);
+          else show();
+        });
+        buttons.appendChild(b);
+      });
+      function show() {
+        const d = set[i];
+        prompt.textContent = d.y + "  ·  " +
+          ["—","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.m] +
+          "  " + String(d.d).padStart(2, "0");
+        status.textContent = "date " + (i + 1) + " of " + N;
+      }
+      root.appendChild(prompt); root.appendChild(buttons); root.appendChild(status);
+      show();
+      function finish(seconds, correct) {
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: correct + " of " + N + " correct in " + seconds.toFixed(1) + "s." }));
+        logRow(root, correct, skill.unit, seconds.toFixed(1) + "s elapsed", onLog);
+        root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+      }
+    }
+    render();
+  };
+
+  /* ── IV. One Minute ───────────────────────────────────────── */
+  CALIBRATIONS.oneMinute = function (skill, container, onLog) {
+    const root = widgetShell(container, {
+      help: "Press start. Wait until you feel one minute has passed. Press stop."
+    });
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "start", type: "button", onclick: run });
+      root.appendChild(begin);
+    }
+    function run() {
+      clear(root);
+      const start = performance.now();
+      root.appendChild(el("p", { class: "widget-finish text-dim",
+        text: "do not count. Listen to the body's clock." }));
+      const stop = el("button", { class: "cal-btn cal-btn-large", type: "button", text: "stop" });
+      stop.addEventListener("click", function () {
+        const elapsed = (performance.now() - start) / 1000;
+        const error = Math.abs(elapsed - 60);
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: "you stopped at " + elapsed.toFixed(2) + "s · error " +
+                (elapsed > 60 ? "+" : "−") + error.toFixed(2) + "s" }));
+        const v = Math.round(error * 100) / 100;
+        const note = (elapsed > 60 ? "long" : "short") + " · stopped at " + elapsed.toFixed(2) + "s";
+        logRow(root, v, skill.unit, note, onLog);
+        root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+      });
+      root.appendChild(stop);
+    }
+    render();
+  };
+
+  /* ── V. Clock Reading ─────────────────────────────────────── */
+  CALIBRATIONS.clockRead = function (skill, container, onLog) {
+    const N = 10;
+    const root = widgetShell(container, {
+      help: "Ten random clock faces. Type the time as 'h:mm' (12-hour). The timer runs across the set."
+    });
+    function clockSVG(h, m) {
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("class", "clock-face");
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("cx", 50); c.setAttribute("cy", 50); c.setAttribute("r", 46);
+      c.setAttribute("class", "clock-rim"); svg.appendChild(c);
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * 2 * Math.PI - Math.PI / 2;
+        const x1 = 50 + Math.cos(a) * 40, y1 = 50 + Math.sin(a) * 40;
+        const x2 = 50 + Math.cos(a) * 44, y2 = 50 + Math.sin(a) * 44;
+        const tk = document.createElementNS(svgNS, "line");
+        tk.setAttribute("x1", x1); tk.setAttribute("y1", y1);
+        tk.setAttribute("x2", x2); tk.setAttribute("y2", y2);
+        tk.setAttribute("class", "clock-tick" + (i % 3 === 0 ? " bold" : ""));
+        svg.appendChild(tk);
+      }
+      const hAng = ((h % 12) + m / 60) / 12 * 2 * Math.PI - Math.PI / 2;
+      const mAng = (m / 60) * 2 * Math.PI - Math.PI / 2;
+      function hand(ang, len, cls) {
+        const x = 50 + Math.cos(ang) * len, y = 50 + Math.sin(ang) * len;
+        const ln = document.createElementNS(svgNS, "line");
+        ln.setAttribute("x1", 50); ln.setAttribute("y1", 50);
+        ln.setAttribute("x2", x); ln.setAttribute("y2", y);
+        ln.setAttribute("class", cls);
+        svg.appendChild(ln);
+      }
+      hand(hAng, 24, "clock-hour");
+      hand(mAng, 36, "clock-min");
+      const cap = document.createElementNS(svgNS, "circle");
+      cap.setAttribute("cx", 50); cap.setAttribute("cy", 50); cap.setAttribute("r", 2);
+      cap.setAttribute("class", "clock-cap"); svg.appendChild(cap);
+      return svg;
+    }
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "begin", type: "button", onclick: run });
+      root.appendChild(begin);
+    }
+    function parseTime(s) {
+      const m = String(s).trim().match(/^(\d{1,2})[:.](\d{1,2})$/);
+      if (!m) return null;
+      const h = parseInt(m[1], 10) % 12, mm = parseInt(m[2], 10);
+      if (mm < 0 || mm > 59) return null;
+      return { h: h, m: mm };
+    }
+    function run() {
+      clear(root);
+      const set = [];
+      for (let i = 0; i < N; i++) set.push({ h: rndInt(1, 12), m: rndInt(0, 59) });
+      let i = 0; let correct = 0;
+      const start = performance.now();
+      const wrap = el("div", { class: "clock-wrap" });
+      const status = el("div", { class: "widget-status" });
+      const input = el("input", {
+        type: "text", class: "widget-input", autocomplete: "off",
+        inputmode: "numeric", placeholder: "h:mm"
+      });
+      function show() {
+        clear(wrap);
+        wrap.appendChild(clockSVG(set[i].h, set[i].m));
+        status.textContent = "face " + (i + 1) + " of " + N;
+        input.value = ""; input.focus();
+      }
+      input.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        const t = parseTime(input.value);
+        if (!t) return;
+        if (t.h === (set[i].h % 12) && Math.abs(t.m - set[i].m) <= 1) correct++;
+        i++;
+        if (i >= N) finish((performance.now() - start) / 1000, correct);
+        else show();
+      });
+      root.appendChild(wrap); root.appendChild(input); root.appendChild(status);
+      show();
+      function finish(seconds, correct) {
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: correct + " of " + N + " in " + seconds.toFixed(1) + "s." }));
+        const value = Math.round(seconds * 10) / 10;
+        const note = correct + "/" + N + " correct (±1 min tolerated)";
+        logRow(root, value, skill.unit, note, onLog);
+        root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+      }
+    }
+    render();
+  };
+
+  /* ── VI. Pitch Intervals ──────────────────────────────────── */
+  CALIBRATIONS.pitchInterval = function (skill, container, onLog) {
+    const INTERVALS = [
+      { label: "minor 3rd",   semis: 3 },
+      { label: "major 3rd",   semis: 4 },
+      { label: "perfect 4th", semis: 5 },
+      { label: "perfect 5th", semis: 7 },
+      { label: "octave",      semis: 12 }
+    ];
+    const N = 10;
+    const root = widgetShell(container, {
+      help: "Ten intervals. Two notes will sound. Choose the interval. " +
+            "Replay any time. Audio uses the browser's synth — turn the volume up gently."
+    });
+    let audioCtx = null;
+    function note(freq, when, dur) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, when);
+      g.gain.exponentialRampToValueAtTime(0.18, when + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(when); o.stop(when + dur + 0.05);
+    }
+    function play(rootFreq, semis) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const t = audioCtx.currentTime + 0.04;
+      const f2 = rootFreq * Math.pow(2, semis / 12);
+      note(rootFreq, t, 0.55);
+      note(f2, t + 0.65, 0.55);
+    }
+    function render() {
+      clear(root);
+      const begin = el("button", { class: "cal-btn", text: "begin", type: "button", onclick: run });
+      root.appendChild(begin);
+    }
+    function run() {
+      clear(root);
+      const set = [];
+      for (let i = 0; i < N; i++) {
+        const rootFreq = 220 * Math.pow(2, rndInt(0, 8) / 12);
+        const choice = INTERVALS[rndInt(0, INTERVALS.length - 1)];
+        set.push({ rootFreq: rootFreq, ans: choice });
+      }
+      let i = 0; let correct = 0;
+      const status = el("div", { class: "widget-status" });
+      const replay = el("button", { class: "cal-btn", type: "button", text: "play" });
+      const buttons = el("div", { class: "interval-buttons" });
+      INTERVALS.forEach(function (iv) {
+        const b = el("button", { type: "button", class: "dow-btn wide", text: iv.label });
+        b.addEventListener("click", function () {
+          if (iv.label === set[i].ans.label) correct++;
+          i++;
+          if (i >= N) finish(correct);
+          else show();
+        });
+        buttons.appendChild(b);
+      });
+      replay.addEventListener("click", function () {
+        play(set[i].rootFreq, set[i].ans.semis);
+      });
+      function show() {
+        status.textContent = "interval " + (i + 1) + " of " + N;
+        play(set[i].rootFreq, set[i].ans.semis);
+      }
+      root.appendChild(status); root.appendChild(replay); root.appendChild(buttons);
+      show();
+      function finish(correct) {
+        clear(root);
+        root.appendChild(el("p", { class: "widget-finish",
+          text: correct + " of " + N + " correct." }));
+        logRow(root, correct, skill.unit, "of " + N, onLog);
+        root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+      }
+    }
+    render();
+  };
+
+  /* ── VII. Reading Pace ────────────────────────────────────── */
+  CALIBRATIONS.readingPace = function (skill, container, onLog) {
+    const PASSAGE = (
+      "Mr Utterson the lawyer was a man of a rugged countenance, that was never " +
+      "lighted by a smile; cold, scanty, and embarrassed in discourse; backward in " +
+      "sentiment; lean, long, dusty, dreary, and yet somehow lovable. At friendly " +
+      "meetings, and when the wine was to his taste, something eminently human " +
+      "beaconed from his eye; something indeed which never found its way into his " +
+      "talk, but which spoke not only in these silent symbols of the after-dinner " +
+      "face, but more often and loudly in the acts of his life. He was austere with " +
+      "himself; drank gin when he was alone, to mortify a taste for vintages; and " +
+      "though he enjoyed the theatre, had not crossed the doors of one for twenty " +
+      "years. But he had an approved tolerance for others; sometimes wondering, " +
+      "almost with envy, at the high pressure of spirits involved in their " +
+      "misdeeds; and in any extremity inclined to help rather than to reprove. " +
+      "'I incline to Cain's heresy,' he used to say quaintly; 'I let my brother " +
+      "go to the devil in his own way.'"
+    );
+    const WORDS = PASSAGE.trim().split(/\s+/).length;
+    const root = widgetShell(container, {
+      help: "Read the passage aloud, calmly, at a public-lectern pace. " +
+            "Press start when you begin and stop when you reach the final word. (" + WORDS + " words.)"
+    });
+    function render() {
+      clear(root);
+      root.appendChild(el("blockquote", { class: "reading-passage", text: PASSAGE }));
+      root.appendChild(el("p", { class: "cal-help dim",
+        text: "Robert Louis Stevenson, 'The Strange Case of Dr Jekyll and Mr Hyde', 1886." }));
+      const start = el("button", { class: "cal-btn", text: "start reading", type: "button" });
+      let t0 = 0;
+      start.addEventListener("click", function () {
+        t0 = performance.now();
+        clear(root);
+        root.appendChild(el("blockquote", { class: "reading-passage", text: PASSAGE }));
+        const stop = el("button", { class: "cal-btn cal-btn-large", text: "stop", type: "button" });
+        stop.addEventListener("click", function () {
+          const seconds = (performance.now() - t0) / 1000;
+          const wpm = Math.round((WORDS / seconds) * 60);
+          clear(root);
+          root.appendChild(el("p", { class: "widget-finish",
+            text: WORDS + " words in " + seconds.toFixed(1) + "s · " + wpm + " wpm" }));
+          logRow(root, wpm, skill.unit, seconds.toFixed(1) + "s elapsed", onLog);
+          root.appendChild(el("button", { type: "button", class: "ghost-btn", text: "again", onclick: render }));
+        });
+        root.appendChild(stop);
+      });
+      root.appendChild(start);
+    }
+    render();
+  };
+
+  /* ── VIII. Freehand Circle (self-rated) ───────────────────── */
+  CALIBRATIONS.circleSelfRate = function (skill, container, onLog) {
+    const root = widgetShell(container, {
+      help: "Draw your circle on paper. Step three paces back. Then rate it honestly."
+    });
+    const wrap = el("div", { class: "slider-wrap" });
+    const range = el("input", {
+      type: "range", min: "0", max: "10", step: "1", value: "5", class: "circle-slider"
+    });
+    const valueLabel = el("span", { class: "slider-value", text: "5" });
+    range.addEventListener("input", function () { valueLabel.textContent = range.value; });
+    wrap.appendChild(el("span", { class: "slider-end", text: "0" }));
+    wrap.appendChild(range);
+    wrap.appendChild(el("span", { class: "slider-end", text: "10" }));
+    root.appendChild(wrap);
+    root.appendChild(el("div", { class: "slider-display" }, [
+      el("span", { class: "slider-display-label", text: "your verdict: " }),
+      valueLabel,
+      el("span", { class: "slider-display-label", text: " / 10" })
+    ]));
+    const submit = el("button", { class: "cal-btn", type: "button", text: "record",
+      onclick: function () { onLog(parseInt(range.value, 10), ""); } });
+    root.appendChild(submit);
+  };
 
   /* ─────────────────────────── views ───────────────────────── */
   const view = function () { return document.getElementById("view"); };
