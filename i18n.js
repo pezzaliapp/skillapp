@@ -698,86 +698,323 @@ window.META.it = {
   }
 };
 
-/* Italian skill text — titles, units, placeholders.
-   Bodies (description, origin, protocol, marginalia, warning) are
-   added in the next commit. Until then, those fall back to English. */
+/* Italian skill text — full content for the seventeen articles. */
 
 window.SKILL_TEXT.it = {
   "mental-mult": {
     title: "La Moltiplicazione Mentale di Numeri a Due Cifre",
-    unit: "secondi per cinque problemi"
+    unit: "secondi per cinque problemi",
+    description:
+      "L'arte di moltiplicare due numeri a due cifre nella testa, senza carta, senza appoggiare la mano. Un tempo era la routine di impiegati e religiosi; oggi è una piccola disciplina privata.",
+    origin:
+      "Finché l'abaco prima, il regolo poi, e infine la calcolatrice non lo soppiantarono uno dopo l'altro, il computer umano era una professione rispettata. Il calcolatore-prodigio Zerah Colburn elevò al quadrato 999 all'età di otto anni; Aitken moltiplicava coppie a quattro cifre nel respiro di un orologio. I loro metodi non sono perduti — sono soltanto non più obbligatori.",
+    protocol: [
+      "Siediti dritto. Mani aperte. Occhi su un singolo punto a media distanza.",
+      "Scomponi da sinistra: 47 × 83 = (40 × 83) + (7 × 83).",
+      "Tieni la somma parziale nel taccuino visivo dietro gli occhi.",
+      "Resisti alla scrittura. Resisti al ricalcare con il dito sul tavolo.",
+      "Verifica solo dopo aver risposto. Dieci minuti al giorno per trenta giorni."
+    ],
+    marginalia:
+      "Non ci sono calcoli, ma soltanto il ritmo dell'attenzione. — da Calvino"
   },
+
   "major-system": {
     title: "Il Sistema di Major per Memorizzare le Cifre",
-    unit: "cifre ricordate (su dieci)"
+    unit: "cifre ricordate (su dieci)",
+    description:
+      "Un metodo, codificato da Stanislaus Mink von Wennsshein nel 1648, che converte ogni cifra in un suono consonantico e li riassembla in parole vivide. Il nove diventa una P morbida; il sei una SC dolce; le altre seguono. Con esso si diventa capaci di memorizzare un numero di telefono, un codice postale, o un anniversario dimenticato.",
+    origin:
+      "Il sistema passò dalle scuole mnemoniche tedesche per Aimé Paris nella Francia del XIX secolo, e poi ai prestigiatori del varietà edoardiano, dove i numeri di memoria potevano riempire un teatro. Oggi sopravvive tra mnemonisti e una discreta manciata di studenti di medicina.",
+    protocol: [
+      "Memorizza il cifrario: 0=S/Z, 1=T/D, 2=N, 3=M, 4=R, 5=L, 6=J/SC, 7=K/G, 8=F/V, 9=P/B.",
+      "Quando appaiono dieci cifre, raggruppale a coppie ed evoca una sola immagine per coppia.",
+      "Disponi ciascuna immagine lungo un percorso familiare attraverso la tua casa.",
+      "Per ricordare, percorri la casa nello stesso ordine e leggi le immagini.",
+      "Le vocali sono libere. Usale per tenere insieme le immagini."
+    ],
+    marginalia:
+      "La memoria è un prato che si miete da sé se non viene calpestato. — anonimo"
   },
+
   "doomsday": {
     title: "Il Giorno della Settimana di una Data Qualunque",
-    unit: "corrette in sessanta secondi"
+    unit: "corrette in sessanta secondi",
+    description:
+      "Data una qualunque data, diciamo tra il 1900 e il 2099, nomina il giorno della settimana in meno di dieci secondi. Il trucco è la regola Doomsday di John Conway: ogni anno ha un giorno-àncora sul quale cadono il 4 aprile, il 6 giugno, l'8 agosto, il 10 ottobre e il 12 dicembre. Dall'àncora, ogni altra data è un breve salto.",
+    origin:
+      "Conway, il matematico dei giochi e dei numeri surreali, ideò l'algoritmo nel 1973 davanti a un caffè a Cambridge, e si racconta lo praticasse sul suo computer a ogni login finché non riusciva a rispondere in meno di due secondi.",
+    protocol: [
+      "Memorizza le àncore di secolo: anni 1900 = mercoledì, anni 2000 = martedì.",
+      "Per un anno YY del 2000: prendi YY/12, il resto, e resto/4; somma, e aggiungi martedì.",
+      "Dall'àncora dell'anno, salta al 'doomsday' più vicino al mese cercato (4/4, 6/6, 8/8, 10/10, 12/12; il 3 o il 4 gennaio; l'ultimo giorno di febbraio).",
+      "Salta avanti o indietro fino al giorno richiesto.",
+      "Esercitati su cinque date al mattino. Riferisci con la lingua, non con le dita."
+    ],
+    marginalia:
+      "Il tempo è una ruota. I denti si incastrano sempre. — Conway, parafrasato"
   },
+
   "one-minute": {
     title: "La Stima di un Minuto a Sensazione",
-    unit: "secondi di errore"
+    unit: "secondi di errore",
+    description:
+      "Avvia un cronometro nascosto. Aspetta. Fermalo quando, a tuo giudizio, sono trascorsi sessanta secondi. L'errore è la tua rilevazione. La maggior parte degli adulti sbaglia di dodici-venti secondi al primo tentativo, di meno di cinque entro una quindicina di giorni.",
+    origin:
+      "Gli orologi interni sono economici e imprecisi, ma possono essere calibrati. Gli equipaggi dei sottomarini e gli apneisti allenano questa abilità in modo esplicito; i batteristi di jazz l'acquisiscono senza pensarci. Il substrato sembra essere nei gangli della base.",
+    protocol: [
+      "Siediti. Respira normalmente. Non contare.",
+      "Avvia il cronometro a occhi chiusi.",
+      "Osserva il tuo senso di durata senza forzarlo.",
+      "Ferma quando sessanta sembrano giusti.",
+      "Ripeti tre volte. La varianza è la lezione."
+    ],
+    marginalia:
+      "Contare è barare. Senti il minuto. — manuale di immersione Cousteau, 1953"
   },
+
   "clock-read": {
     title: "La Lettura Veloce del Quadrante Analogico",
-    unit: "secondi per dieci quadranti"
+    unit: "secondi per dieci quadranti",
+    description:
+      "Un'abilità che un tempo si pretendeva da ogni bambino di sei anni, ora in arretramento. Appaiono dieci quadranti casuali. Tu pronunci ad alta voce ogni ora. Sotto l'apparente trivialità si nasconde una rapida inferenza geometrica che il tuo occhio sa ancora fare.",
+    origin:
+      "Prima dell'avvento dei display LCD a basso costo, il quadrante analogico era la faccia pubblica del tempo stesso: sulle banchine delle stazioni, sui muri delle cucine, nei cortili delle scuole. Leggerlo sotto pressione — di corsa per il treno, alla fine di un compito in classe — era una cerimonia quotidiana.",
+    protocol: [
+      "Sbircia, non fissare.",
+      "Prima la lancetta delle ore; solo il quadrante.",
+      "Poi la lancetta dei minuti; arrotonda al cinque più vicino.",
+      "Pronuncia l'ora prima che venga disegnato il quadrante successivo.",
+      "Lasciati scorrere, non farti prendere dal panico. La velocità segue la scioltezza."
+    ],
+    marginalia:
+      "L'orologio è onesto, soltanto impaziente. — motto da aula scolastica, Inghilterra"
   },
+
   "pitch-intervals": {
     title: "Il Riconoscimento degli Intervalli Musicali",
-    unit: "corretti su dieci"
+    unit: "corretti su dieci",
+    description:
+      "Suonano due note. Nomina la distanza tra loro. La quinta giusta apre il tema di Guerre Stellari; la terza minore sono le prime due note di Greensleeves; il tritono è il diabolus in musica. Il vocabolario è piccolo — la discriminazione è l'allenamento di una vita intera.",
+    origin:
+      "Il solfeggio — do, re, mi — fu sistematizzato da Guido d'Arezzo intorno al 1025 per insegnare ai monaci a cantare a prima vista canti gregoriani sconosciuti. I nomi degli intervalli che emergono dal suo sistema sono gli stessi che i musicisti moderni usano davanti a un caffè.",
+    protocol: [
+      "Abbina ciascun intervallo a una canzone che già conosci.",
+      "Ascolta prima la nota più bassa; cantala a te stesso.",
+      "Canta in silenzio la nota più alta. L'intervallo è la distanza.",
+      "Comincia con tre intervalli. Aggiungine uno a settimana.",
+      "Allenati al limite della sicurezza, mai oltre."
+    ],
+    marginalia:
+      "L'orecchio è istruito dalla gola. — Zoltán Kodály"
   },
+
   "reading-pace": {
     title: "La Lettura ad Alta Voce a Duecento Parole al Minuto",
-    unit: "parole al minuto"
+    unit: "parole al minuto",
+    description:
+      "Una lettura pubblica senza fretta sta sulle 150 parole al minuto. Un lettore da leggio allenato raggiunge le 200. L'obiettivo non è la fretta ma la leggibilità a velocità: il fraseggio, il respiro, la consonante trattenuta, l'atterraggio morbido del punto.",
+    origin:
+      "Fino al XVII secolo quasi tutta la lettura si faceva ad alta voce, anche in solitudine. Leggere in silenzio era sospetto; ci si aspettava che le labbra si muovessero. L'abilità di leggere bene ad alta voce era dunque l'abilità della lettura stessa.",
+    protocol: [
+      "In piedi. Tieni la pagina all'altezza dello sterno.",
+      "Respira alle virgole, non agli a-capo.",
+      "Alleggerisci la fine delle frasi; l'aria deve cadere, non precipitarsi.",
+      "Tieni la mascella morbida. La voce cavalca il respiro.",
+      "Cronometra solo i primi trenta secondi; lascia che il resto si srotoli."
+    ],
+    marginalia:
+      "Leggi come a un bambino seduto dall'altra parte di un piccolo fuoco. — anonimo, 1880 ca."
   },
+
   "freehand-circle": {
     title: "Il Cerchio a Mano Libera",
-    unit: "autovalutazione, da zero a dieci"
+    unit: "autovalutazione, da zero a dieci",
+    description:
+      "In piedi davanti a una lavagna. Con un singolo movimento ininterrotto della spalla, traccia un cerchio. Il polso non deve muoversi. Il gomito contribuisce solo per estensione. Il risultato è giudicato dall'occhio e dalla coscienza — senza compasso.",
+    origin:
+      "Giotto, richiesto di inviare un saggio della sua opera al Papa, intinse il pennello nel rosso e tracciò un cerchio perfetto in un solo gesto. Il Papa lo ricevette. Giotto fu assunto. Vera o no la storia — e quasi certamente non lo è — la prova ha affascinato gli studenti di disegno per sette secoli.",
+    protocol: [
+      "Ancora la spalla; blocca il polso.",
+      "Traccia una croce-guida leggera. Le intersezioni sono i tuoi punti di tangenza.",
+      "Comincia a mezzogiorno; impegnati in un'unica spazzata.",
+      "Espira lungo il tratto.",
+      "Allontanati di tre passi. Giudica da lì."
+    ],
+    marginalia:
+      "Tondo come un O di Giotto. — Vasari, Vite, 1568"
   },
+
   "bowline": {
     title: "Il Nodo Bolina del Marinaio",
     unit: "secondi, a occhi chiusi",
-    placeholder: "es. 6.5"
+    placeholder: "es. 6.5",
+    description:
+      "Il re dei nodi. Un occhio che tiene sotto qualunque carico e che si scioglie senza sforzo non appena il carico viene rilasciato. Per essere considerato fluente devi annodarlo dietro la schiena, con una mano sola, al buio, e attorno alla tua vita mentre stai annegando. (Esercitati alla luce del giorno.)",
+    origin:
+      "La bolina compare nel sartiame egizio della XVIII dinastia. Il mnemonico — 'il coniglio esce dalla tana, gira intorno all'albero, e rientra nella tana' — veniva insegnato ai cadetti della marina britannica per tutto il XIX secolo, e si insegna ancora.",
+    protocol: [
+      "Forma un piccolo occhiello sulla parte fissa: questa è la tana del coniglio.",
+      "Fai passare il capo libero attraverso la tana, dal basso verso l'alto.",
+      "Intorno alla parte fissa — l'albero.",
+      "Di nuovo giù attraverso la tana.",
+      "Stringi, con il capo libero all'interno dell'occhio."
+    ],
+    marginalia:
+      "Se un nodo non si scioglie sotto il pollice, è il nodo sbagliato."
   },
+
   "riffle-shuffle": {
     title: "Il Mischio a Pioggia",
     unit: "mischi puliti su venti",
-    placeholder: "0–20"
+    placeholder: "0–20",
+    description:
+      "Due metà di un mazzo, fatte cadere a ponte. Le carte si intercalano, idealmente alternate una a una. Un mischio pulito si valuta per l'assenza di grumi — tre o più carte di una stessa metà che cadono insieme è un fallo.",
+    origin:
+      "Il riffle, come quasi tutte le tecniche con le carte, fu perfezionato sui battelli e nelle bische del Mississippi nell'Ottocento, poi prestato ai matematici, che dimostrarono come sette mischi bastino a mescolare completamente un mazzo (Bayer & Diaconis, 1992).",
+    protocol: [
+      "Taglia il mazzo in due metà quasi uguali, su un tavolo.",
+      "Tieni ciascuna metà sul lato corto, pollice sopra, dita sotto.",
+      "Avvicina le due metà finché gli angoli si sovrappongono.",
+      "Rilascia con i pollici a velocità uguale; il peso sta nei polsi, non nelle dita.",
+      "Fai il ponte sollevando i lati lunghi e lasciandoli cadere."
+    ],
+    marginalia:
+      "Sette è il numero magico. Meno è fortuna; più è teatro. — Diaconis"
   },
+
   "knuckle-roll": {
     title: "La Camminata della Moneta sulle Nocche",
     unit: "rotazioni in trenta secondi",
-    placeholder: "es. 24"
+    placeholder: "es. 24",
+    description:
+      "Una singola moneta cammina lungo il dorso della mano, nocca per nocca, sul suo bordo. La moneta non deve fermarsi. La mano non deve inclinarsi. Un pezzo da due euro, un mezzo dollaro, una moneta da cinquanta centesimi — qualunque moneta pesante va bene; il rame è troppo leggero per portare la lezione.",
+    origin:
+      "I prestigiatori la chiamano steeplechase o muscle-pass. Nacque, come quasi tutto il lavoro con le monete, tra i saltimbanchi europei del Settecento, e fu addomesticata per il salotto dal grande prestigiatore americano T. Nelson Downs.",
+    protocol: [
+      "Posa la moneta sulla nocca dell'indice, di taglio.",
+      "Inclina per farla ruotare sulla nocca del medio, poi su quella dell'anulare.",
+      "Prendila al mignolo con il pollice di sotto.",
+      "Riportala all'indice passando da sotto.",
+      "Esercitati nella tasca di un cappotto; il fallimento è silenzioso."
+    ],
+    marginalia:
+      "La moneta non è tua nemica. È soltanto più pesante di come la ricordi."
   },
+
   "plank": {
     title: "La Tenuta del Plank",
     unit: "secondi tenuti",
-    placeholder: "es. 90"
+    placeholder: "es. 90",
+    description:
+      "Avambracci a terra, spalle perfettamente sopra i gomiti, corpo una sola linea dal tallone alla sommità del capo. Tenuto a tempo. L'arte non è la durata ma la qualità: nel momento in cui la linea si spezza, la prova è finita, anche se il tuo cronometro non l'ha notato.",
+    origin:
+      "Le posture yogiche isometriche di questa famiglia hanno almeno duemila anni. Il 'plank' come prova fisica misurata entra nelle riviste di allenamento occidentali negli anni Ottanta, attraverso fonti ginniche e militari.",
+    protocol: [
+      "Posiziona i gomiti sotto le spalle. Apri le dita.",
+      "Inclina il bacino di mezzo grado. La parte bassa della schiena non deve aprirsi.",
+      "Premi gli avambracci verso il basso; non lasciarli riposare.",
+      "Respira con il naso; sei tempi in entrata, sei tempi in uscita.",
+      "Termina la tenuta nell'istante in cui la linea si ammorbidisce. La prova è l'onestà."
+    ],
+    marginalia:
+      "Sono i muscoli silenziosi a sostenere quelli rumorosi."
   },
+
   "breath-hold": {
     title: "L'Apnea Statica a Secco",
     unit: "secondi tenuti",
-    placeholder: "es. 75"
+    placeholder: "es. 75",
+    warning:
+      "Esercitati solo a terra, seduto, mai vicino all'acqua o dentro l'acqua, e non dopo pasti abbondanti. Fermati al primo impulso di respirare; l'impulso è informazione, non debolezza.",
+    description:
+      "Seduto dritto, polmoni comodamente pieni, vie respiratorie chiuse alla gola. Il tempo comincia. Il primo impulso di respirare arriva come una contrazione del diaframma; va osservato, non obbedito, finché non diventa tre volte più forte — poi rilasciato.",
+    origin:
+      "Le pescatrici Ama del Giappone e le Haenyeo dell'isola di Jeju praticano da secoli lunghe apnee statiche a terra, prima e dopo le immersioni di lavoro. I numeri moderni (otto, dieci, undici minuti) appartengono agli atleti; per il dilettante, due minuti sono una meraviglia, tre uno stupore quieto.",
+    protocol: [
+      "Siediti. Prima di tutto, due minuti di respirazione nasale lenta.",
+      "Un respiro finale: non massimale, ma pieno e disteso.",
+      "Chiudi la gola con dolcezza. Avvia il cronometro.",
+      "Quando il diaframma sussulta, conta le contrazioni; non inseguire la distanza.",
+      "Rilascia prima che il disagio diventi allarme. La pratica sta nella calma, non nei secondi."
+    ],
+    marginalia:
+      "Il polmone impara perché ci si fida di lui, non perché lo si insegua."
   },
+
   "paper-throw": {
     title: "Il Tiro della Pagina Accartocciata",
     unit: "centri su dieci tentativi",
-    placeholder: "0–10"
+    placeholder: "0–10",
+    description:
+      "Accartoccia un foglio A4 in una palla compatta. Mettiti a tre passi dal cestino. Lancia da sotto. Segna un punto per ogni palla che atterra e resta. La prova è di dieci palle, ciascuna una decisione separata.",
+    origin:
+      "L'abilità non è la pallacanestro, che si esegue sotto difensori e contro il tempo. È più vicina alle bocce o al lawn bowls: un bersaglio fermo, un lanciatore fermo, il corpo a cui è concesso di assestarsi tra un tentativo e l'altro.",
+    protocol: [
+      "Misura tre passi dal cestino. Segna il punto.",
+      "Accartoccia ogni palla con la stessa forza; il peso deve essere uniforme.",
+      "Occhi sul bordo, non sul cestino.",
+      "Un arco lungo e morbido; il gomito guida, il polso segue.",
+      "Scarta il risultato precedente prima del lancio successivo."
+    ],
+    marginalia:
+      "Il cestino è paziente. Dovresti esserlo anche tu."
   },
+
   "italic-hand": {
     title: "La Scrittura Corsiva Italica",
     unit: "leggibilità autovalutata, da zero a dieci",
-    placeholder: "il tuo verdetto"
+    placeholder: "il tuo verdetto",
+    description:
+      "Una corsiva leggermente inclinata di origine umanistica italiana, progettata per la leggibilità a velocità. Ogni minuscola un solo tratto deciso; le legature strette anziché ricciolute. Siediti, inchiostra il pennino, e traccia un'unica riga di pangramma: 'ma la volpe col suo balzo ha raggiunto il quieto Fido'.",
+    origin:
+      "Niccolò Niccoli, umanista fiorentino del primo Quattrocento, ideò la cancelleresca per la copiatura rapida dei manoscritti classici. Per il Cinquecento il grande maestro di scrittura Ludovico degli Arrighi l'aveva codificata nel primo manuale di calligrafia stampato, La Operina, 1522.",
+    protocol: [
+      "Una penna con punta a scalpello leggera — italic 1.1mm o stilografica stub.",
+      "Tieni la penna a quarantacinque gradi rispetto al rigo.",
+      "Inclina la mano di cinque gradi in avanti, non di più.",
+      "Ogni lettera un singolo tratto, che termina nell'inizio della successiva.",
+      "Non avvolgere nulla. Solleva di rado. Lascia respirare la riga."
+    ],
+    marginalia:
+      "Scribere semper currens. — Arrighi, La Operina"
   },
+
   "needle-thread": {
     title: "Infilare l'Ago",
     unit: "secondi al primo infilato",
-    placeholder: "es. 4.2"
+    placeholder: "es. 4.2",
+    description:
+      "Un ago da cucito standard, cruna numero nove. Un segmento di filo di cotone. La mano a riposo, il respiro leggero, gli occhi un poco più lontani dall'ago di quanto sembri naturale. Il tempo comincia quando il filo tocca per la prima volta la cruna e finisce quando vi è passato pulito.",
+    origin:
+      "L'infilatura degli aghi è l'esempio canonico, nella scrittura buddista, di un'azione che richiede attenzione completa e silenziosa. Nell'Aṅguttara Nikāya serve da parabola: la mano ferma è la mente ferma.",
+    protocol: [
+      "Taglia il filo con un'angolatura netta.",
+      "Inumidisci il taglio tra le labbra; le fibre si compattano.",
+      "Tieni l'ago all'altezza del cuore.",
+      "Porta il filo all'ago, non l'ago al filo.",
+      "Espira mentre la cruna si avvicina."
+    ],
+    marginalia:
+      "L'ago è una piccola calma. Il filo è una piccola intenzione."
   },
+
   "pen-spin": {
     title: "La Rotazione della Penna Attorno al Pollice",
     unit: "rotazioni in trenta secondi",
-    placeholder: "es. 18"
+    placeholder: "es. 18",
+    description:
+      "Una penna, in equilibrio tra l'indice e il medio, viene spinta da un piccolo impulso dell'indice. Ruota una volta intorno al pollice e viene presa tra il medio e l'anulare. La presa è la disciplina; la rotazione è solo l'annuncio.",
+    origin:
+      "Conosciuta dagli studenti annoiati di ogni nazione, la mossa fu formalizzata nelle scuole superiori giapponesi negli anni Ottanta e battezzata 'thumb around', una delle quattro mosse fondamentali del pen-spinning, insieme alla sonic, alla charge e al fingerpass.",
+    protocol: [
+      "Una penna di peso uniforme; tappo inserito. Una penna più pesante impara prima.",
+      "Impugna tra indice e medio, con il pollice dietro, leggero.",
+      "Spingi con l'indice; il polso rimane fermo.",
+      "Lascia che la penna completi l'orbita prima di andare a prenderla.",
+      "La presa è tra medio e anulare — esercita prima la presa da sola."
+    ],
+    marginalia:
+      "La noia, dato un piccolo compito, diventa arte."
   }
 };
