@@ -69,6 +69,12 @@
     document.documentElement.setAttribute("lang", currentLocale);
     const md = document.querySelector('meta[name="description"]');
     if (md) md.setAttribute("content", t("meta_description"));
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", t("title_codex"));
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute("content", t("meta_description"));
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute("content", currentLocale === "it" ? "it_IT" : "en_GB");
     const m = meta();
     const subEl = document.querySelector(".masthead-sub");
     if (subEl) subEl.textContent = m.title || "";

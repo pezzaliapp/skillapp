@@ -44,13 +44,24 @@ python3 -m http.server 4173    # oppure:  npm start
 
 Tutte le rilevazioni vivono nel `localStorage` del browser, sotto la chiave `skillapp.calibrations.v1`. Non lasciano mai il dispositivo. Non ci sono account, server, analytics, né richieste verso terze parti oltre a Google Fonts (che si possono bloccare senza conseguenze — al loro posto verranno caricati il monospaziato di sistema e un serif di ripiego).
 
+## Lingue / Languages
+
+L'app è bilingue, inglese e italiano. Un selettore discreto in alto a destra (**EN · IT**) permette di passare dall'una all'altra senza ricaricare la pagina. La scelta persiste nel `localStorage` sotto `skillapp.locale.v1`. Alla prima visita la lingua viene dedotta da `navigator.language`: l'italiano per i browser configurati su `it` o `it-*`, l'inglese altrimenti.
+
+Tutto è tradotto: l'interfaccia, il colofone, le date, i diciassette articoli (descrizione, paragrafo storico, protocollo, marginalia, avvertenza), il brano di Stevenson per la prova di lettura, gli aforismi a margine. Le marginalie di Calvino, Vasari e Arrighi compaiono nella loro forma italiana autentica; le altre sono traduzioni curate.
+
+L'architettura è semplice: ogni testo traducibile vive in `i18n.js` sotto la sua chiave di locale (`UI.en`, `UI.it`, `META.en`, `META.it`, `SKILL_TEXT.en`, `SKILL_TEXT.it`). Aggiungere una terza lingua si riduce a copiare la sezione inglese e tradurla. Le chiavi mancanti ricadono automaticamente sull'inglese, articolo per articolo.
+
+The app is bilingual, English and Italian. A discreet **EN · IT** switch at the top-right toggles instantly without reloading. The choice persists in `localStorage` under `skillapp.locale.v1`; on first visit it follows `navigator.language`. Adding a third language means duplicating the English block in `i18n.js` and translating it; missing keys fall back to English per-key.
+
 ## File
 
 ```
 index.html      pagina singola, gli script in fondo
 style.css       carta crema, inchiostro nero, accento ruggine, JetBrains Mono + EB Garamond
-data.js         i diciassette articoli e i loro metadati
-app.js          routing, viste, persistenza, grafici, widget di calibrazione
+data.js         struttura dei diciassette articoli (numerali, glifi, categorie, tipo di calibrazione)
+i18n.js         tutto il testo traducibile, per locale: UI, META, contenuti degli articoli
+app.js          routing, viste, persistenza, grafici, widget di calibrazione, locale
 .nojekyll       perché GitHub Pages non si mangi i file con underscore iniziale
 ```
 
