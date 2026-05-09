@@ -845,10 +845,23 @@
 
     const tbl = el("table", { class: "ledger-table" });
     const tb = document.createElement("tbody");
+    let lastDay = "";
     all.forEach(function (e) {
       const skill = SKILL_BY_ID[e.skillId];
+      const d = new Date(e.t);
+      const dayKey = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      if (dayKey !== lastDay) {
+        const dayLabel = todayLabel(d);
+        const groupTr = document.createElement("tr");
+        groupTr.className = "ledger-day";
+        const groupTd = el("td", { colspan: "5", class: "ledger-day-cell", text: dayLabel });
+        groupTr.appendChild(groupTd);
+        tb.appendChild(groupTr);
+        lastDay = dayKey;
+      }
       const tr = document.createElement("tr");
-      tr.appendChild(el("td", { class: "lg-date", text: fmtDate(e.t) }));
+      tr.appendChild(el("td", { class: "lg-date",
+        text: String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0") }));
       const linkCell = el("td", { class: "lg-skill" });
       if (skill) {
         linkCell.appendChild(el("a", {
@@ -866,6 +879,13 @@
     });
     tbl.appendChild(tb);
     v.appendChild(tbl);
+
+    const total = all.length;
+    const skillsTouched = new Set(all.map(function (e) { return e.skillId; })).size;
+    const earliest = new Date(all[all.length - 1].t);
+    v.appendChild(el("p", { class: "ledger-summary",
+      text: total + " readings across " + skillsTouched + " articles · first entry " +
+            todayLabel(earliest).split(",").slice(1).join(",").trim() }));
 
     v.appendChild(rule(""));
     const tools = el("div", { class: "ledger-tools" });
@@ -912,14 +932,136 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
+  /* ─────────────── seeded picker for the daily rite ────────── */
+  function dateSeed(date) {
+    /* a stable hash of YYYY-MM-DD */
+    const s = date.getFullYear() + "-" +
+      String(date.getMonth() + 1).padStart(2, "0") + "-" +
+      String(date.getDate()).padStart(2, "0");
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = (h * 16777619) >>> 0;
+    }
+    return h;
+  }
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function pickRiteSkills(date, n) {
+    const rnd = mulberry32(dateSeed(date));
+    const pool = SKILLS.slice();
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    return pool.slice(0, n);
+  }
+  function todayLabel(d) {
+    const m = ["January","February","March","April","May","June",
+      "July","August","September","October","November","December"];
+    const dows = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    return dows[d.getDay()] + ", " + m[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  }
+  function loggedToday(skillId) {
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    return getEntries().some(function (e) { return e.skillId === skillId && e.t >= cutoff; });
+  }
+
   function renderRite() {
     const v = view(); clear(v);
     document.title = "SKILLAPP — Daily Rite";
+    const today = new Date();
+    const picks = pickRiteSkills(today, 3);
+
     v.appendChild(el("h1", { class: "page-title", text: "The Daily Rite" }));
     v.appendChild(el("p", { class: "page-blurb",
-      text: "Three articles drawn from the codex for today. The same three for the same date, everywhere; tomorrow they will be other three." }));
+      text: "Three articles drawn from the codex for today. " +
+            "The same three on every device, for this date; tomorrow they will be other three." }));
+    v.appendChild(el("p", { class: "rite-date", text: todayLabel(today) }));
+    v.appendChild(rule("the order"));
+
+    const list = el("ol", { class: "rite-list" });
+    picks.forEach(function (skill, idx) {
+      const done = loggedToday(skill.id);
+      const li = el("li", { class: "rite-item" + (done ? " rite-item-done" : "") });
+      li.appendChild(el("div", { class: "rite-numeral", text: ["i.", "ii.", "iii."][idx] }));
+      const body = el("div", { class: "rite-body" });
+      body.appendChild(el("a", { href: "#atelier/" + skill.id, class: "rite-link" }, [
+        el("span", { class: "rite-glyph", text: skill.glyph }),
+        el("span", { class: "rite-title", text: skill.title })
+      ]));
+      body.appendChild(el("p", { class: "rite-desc", text: shortDesc(skill.description) }));
+      body.appendChild(buildRiteTimer(5));
+      if (done) body.appendChild(el("p", { class: "rite-done", text: "✓ a reading was recorded today" }));
+      li.appendChild(body);
+      list.appendChild(li);
+    });
+    v.appendChild(list);
     v.appendChild(rule(""));
-    v.appendChild(el("p", { class: "ledger-empty", text: "The rite is being composed; full timer follows in a later pass." }));
+    v.appendChild(el("p", { class: "rite-foot",
+      text: "Five minutes per article. Fifteen minutes well spent. " +
+            "Open each article to perform the calibration and record a reading." }));
+  }
+  function shortDesc(s) {
+    /* first sentence, capped */
+    const m = String(s).match(/^[^.!?]+[.!?]/);
+    const out = (m ? m[0] : s).trim();
+    return out.length > 180 ? out.slice(0, 177) + "…" : out;
+  }
+  function buildRiteTimer(minutes) {
+    const total = minutes * 60;
+    let remaining = total;
+    let handle = null;
+    const display = el("span", { class: "timer-display", text: fmtTimer(total) });
+    const start = el("button", { type: "button", class: "ghost-btn", text: "start " + minutes + "-min" });
+    const reset = el("button", { type: "button", class: "ghost-btn dim", text: "reset" });
+    function tick() {
+      remaining = Math.max(0, remaining - 1);
+      display.textContent = fmtTimer(remaining);
+      if (remaining === 0) {
+        clearInterval(handle); handle = null;
+        start.textContent = "done";
+        display.classList.add("ringing");
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const o = ctx.createOscillator(); const g = ctx.createGain();
+          o.frequency.value = 660; o.type = "sine";
+          g.gain.setValueAtTime(0.0001, ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(); o.stop(ctx.currentTime + 0.65);
+        } catch (_) {}
+      }
+    }
+    start.addEventListener("click", function () {
+      if (handle) {
+        clearInterval(handle); handle = null; start.textContent = "resume";
+        return;
+      }
+      if (remaining === 0) remaining = total;
+      start.textContent = "pause";
+      display.classList.remove("ringing");
+      handle = setInterval(tick, 1000);
+    });
+    reset.addEventListener("click", function () {
+      if (handle) { clearInterval(handle); handle = null; }
+      remaining = total;
+      display.textContent = fmtTimer(total);
+      display.classList.remove("ringing");
+      start.textContent = "start " + minutes + "-min";
+    });
+    return el("div", { class: "rite-timer" }, [display, start, reset]);
+  }
+  function fmtTimer(s) {
+    const mm = Math.floor(s / 60), ss = s % 60;
+    return String(mm).padStart(2, "0") + ":" + String(ss).padStart(2, "0");
   }
 
   function renderColophon() {
