@@ -505,15 +505,279 @@ window.SKILL_TEXT.en = {
 };
 
 /* ──────────────────────── Italian ──────────────────────── */
-/* Stubbed for now: filled in subsequent commits.
-   Missing keys gracefully fall back to English. */
 
-window.UI.it = {};
-window.META.it = {};
+window.UI.it = {
+  /* navigation */
+  nav_codex: "codice",
+  nav_ledger: "registro",
+  nav_rite: "rito quotidiano",
+  nav_colophon: "colophon",
+  lang_label: "lingua",
+
+  /* common buttons / labels */
+  btn_record: "registra",
+  btn_record_reading: "registra rilevazione",
+  btn_again: "di nuovo",
+  btn_begin: "inizia",
+  btn_start: "avvia",
+  btn_stop: "ferma",
+  btn_pause: "pausa",
+  btn_resume: "riprendi",
+  btn_reset: "azzera",
+  btn_score: "valuta",
+  btn_play: "ascolta",
+  btn_done: "fatto",
+  btn_erase_ledger: "cancella il registro",
+  btn_export_text: "esporta come testo",
+  btn_hide_recall: "nascondi e ricorda",
+  btn_start_reading: "inizia a leggere",
+  btn_start_min: "avvia {min} min",
+  remove_label: "elimina rilevazione",
+
+  /* common */
+  note_optional: "nota (facoltativa)",
+  placeholder_value: "valore",
+  result_label: "risultato: ",
+  back_to_codex: "← codice",
+  article_prefix: "Articolo ",
+
+  /* rule labels */
+  rule_index: "l'indice",
+  rule_order: "l'ordine",
+  rule_description: "descrizione",
+  rule_origin: "origine",
+  rule_protocol: "protocollo",
+  rule_calibration: "calibrazione",
+  rule_readings: "rilevazioni",
+
+  /* atelier */
+  atelier_an_art: "un'arte {cat} · calibrata in {unit}",
+  atelier_warning_tag: "AVVERTENZA",
+  atelier_enter_reading: "Inserisci la rilevazione in {unit}. Premi registra quando sei pronto.",
+
+  /* chart */
+  chart_empty: "nessuna calibrazione ancora",
+  chart_improving: "↗ in miglioramento",
+  chart_steady: "→ costante",
+  chart_drifting: "↘ in deriva",
+  chart_over_n: " su {n} rilevazioni",
+
+  /* ledger */
+  ledger_title: "Il Registro",
+  ledger_blurb: "Tutte le calibrazioni registrate, in ordine cronologico inverso. Il registro è l'unica storia.",
+  ledger_empty: "Nessuna calibrazione ancora. Apri un articolo del codice ed esegui il suo test.",
+  ledger_unknown: "(abilità sconosciuta)",
+  ledger_erase_confirm: "Cancellare ogni calibrazione registrata? L'operazione non è reversibile.",
+  ledger_summary: "{total} rilevazioni in {touched} articoli · prima voce {since}",
+
+  /* daily rite */
+  rite_title: "Il Rito Quotidiano",
+  rite_blurb: "Tre articoli estratti dal codice per oggi. Gli stessi tre su qualunque dispositivo, per questa data; domani saranno altri tre.",
+  rite_foot: "Cinque minuti per articolo. Quindici minuti ben spesi. Apri ciascun articolo per eseguire la calibrazione e registrare una rilevazione.",
+  rite_done_today: "✓ una rilevazione è stata registrata oggi",
+  rite_ordinals: ["i.", "ii.", "iii."],
+
+  /* colophon */
+  colophon_title: "Colophon",
+  colophon_tech: "Composto in JetBrains Mono ed EB Garamond. Stampato nel browser, custodito nel browser. Tutte le rilevazioni vivono in localStorage e non lasciano mai questo dispositivo. Niente account, niente server, niente analytics. Codice sorgente su ",
+  colophon_source_text: "github.com/pezzaliapp/skillapp",
+  colophon_source_period: ".",
+
+  /* not found */
+  not_found_title: "Articolo non trovato",
+  not_found_blurb: "Torna al codice.",
+
+  /* footer */
+  foot_impressum: "impressum: una stampa privata",
+
+  /* document titles */
+  title_codex: "SKILLAPP — Codice delle Arti Minori",
+  title_ledger: "SKILLAPP — Registro",
+  title_rite: "SKILLAPP — Rito Quotidiano",
+  title_colophon: "SKILLAPP — Colophon",
+  title_atelier: "SKILLAPP — {title}",
+
+  /* meta */
+  meta_description: "Un manuale tipografico per la pratica deliberata di piccole, specifiche abilità umane.",
+
+  /* dates */
+  months_short: ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"],
+  months_long:  ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"],
+  days_short:   ["dom","lun","mar","mer","gio","ven","sab"],
+  days_long:    ["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"],
+  date_long:    "{dow} {day} {month} {year}",
+
+  /* widgets — mental multiplication */
+  w_mental_help: "Cinque problemi. Digita ogni risposta e premi Invio. Il cronometro parte quando appare il primo problema.",
+  w_mental_problem: "problema {i} di {n}",
+  w_mental_finish: "{c} corretti su {n} in {s} secondi.",
+  w_mental_note: "{c}/{n} corretti",
+
+  /* widgets — Major system */
+  w_major_help: "Appariranno dieci cifre casuali. Studiale. Quando sei pronto, nascondile e digita ciò che ricordi.",
+  w_major_compose: "Componi le immagini. Quando sei pronto, nascondi e ricorda.",
+  w_major_type_order: "Digita le cifre nell'ordine.",
+  w_major_finish: "{c} cifre su {n} nella posizione corretta.",
+  w_major_shown_typed: "mostrate: {shown} · digitate: {typed}",
+  w_major_dash: "—",
+  w_major_note: "su {n}",
+
+  /* widgets — doomsday */
+  w_doom_help: "Cinque date casuali. Scegli il giorno della settimana. Il cronometro misura l'intera serie.",
+  w_doom_date: "data {i} di {n}",
+  w_doom_finish: "{c} corrette su {n} in {s}s.",
+  w_doom_note_elapsed: "{s}s trascorsi",
+
+  /* widgets — one minute */
+  w_one_help: "Premi avvia. Aspetta finché ti sembra sia passato un minuto. Premi ferma.",
+  w_one_instruction: "non contare. Ascolta l'orologio del corpo.",
+  w_one_finish_long: "ti sei fermato a {elapsed}s · errore +{error}s",
+  w_one_finish_short: "ti sei fermato a {elapsed}s · errore −{error}s",
+  w_one_note_long: "lungo · fermato a {s}s",
+  w_one_note_short: "corto · fermato a {s}s",
+
+  /* widgets — clock */
+  w_clock_help: "Dieci quadranti casuali. Digita l'ora come 'h:mm' (formato dodici ore). Il cronometro misura l'intera serie.",
+  w_clock_face: "quadrante {i} di {n}",
+  w_clock_placeholder: "h:mm",
+  w_clock_finish: "{c} su {n} in {s}s.",
+  w_clock_note: "{c}/{n} corretti (±1 min tollerato)",
+
+  /* widgets — pitch */
+  w_pitch_help: "Dieci intervalli. Suoneranno due note. Scegli l'intervallo. Riascolta quando vuoi. L'audio usa il sintetizzatore del browser — alza il volume con delicatezza.",
+  w_pitch_interval: "intervallo {i} di {n}",
+  w_pitch_finish: "{c} corretti su {n}.",
+  w_pitch_note: "su {n}",
+  w_pitch_intervals: ["terza minore", "terza maggiore", "quarta giusta", "quinta giusta", "ottava"],
+
+  /* widgets — reading pace */
+  w_read_help: "Leggi il brano ad alta voce, con calma, al ritmo di un lettore da leggio. Premi avvia quando inizi e ferma quando arrivi all'ultima parola. ({words} parole.)",
+  w_read_passage: (
+    "L'avvocato Utterson era un uomo dal volto rude, che un sorriso non rischiarò " +
+    "mai; freddo, scarno, impacciato nei discorsi; ritroso nei sentimenti; magro, " +
+    "lungo, polveroso, tetro, e tuttavia in qualche modo amabile. Negli incontri " +
+    "tra amici, e quando il vino era di suo gusto, qualcosa di eminentemente " +
+    "umano si accendeva nel suo sguardo; qualcosa che invero non trovava mai la " +
+    "via dei suoi discorsi, ma che parlava non solo in quei muti segnali del volto " +
+    "dopo cena, ma più spesso e più forte negli atti della sua vita. Era austero " +
+    "con se stesso; quando era solo beveva gin, per mortificare il gusto dei vini " +
+    "d'annata; e benché amasse il teatro, non ne aveva varcato la soglia per " +
+    "vent'anni. Aveva tuttavia una tolleranza accertata per gli altri; talvolta si " +
+    "stupiva, quasi con invidia, dell'alta pressione di spiriti che si sprigionava " +
+    "nei loro misfatti; e in qualunque circostanza estrema era incline ad aiutare " +
+    "anziché a riprovare. 'Inclino all'eresia di Caino,' diceva pittorescamente; " +
+    "'lascio andare mio fratello al diavolo per la sua propria strada.'"
+  ),
+  w_read_attribution: "Robert Louis Stevenson, 'Lo strano caso del dottor Jekyll e del signor Hyde', 1886. Traduzione.",
+  w_read_finish: "{words} parole in {s}s · {wpm} ppm",
+  w_read_note_elapsed: "{s}s trascorsi",
+
+  /* widgets — circle */
+  w_circle_help: "Disegna il cerchio sulla carta. Allontanati di tre passi. Poi giudicalo onestamente.",
+  w_circle_verdict: "il tuo verdetto: ",
+  w_circle_out_of: " / 10"
+};
+
+window.META.it = {
+  edition: "MMXXVI",
+  title: "Codice delle Arti Minori",
+  subtitle: "per la pratica deliberata di piccole, specifiche abilità umane",
+  preface:
+    "Questa è una stampa privata. Diciassette arti minori sono qui raccolte, ciascuna scelta perché modesta nella portata, antica nelle origini e ostinatamente corporea. Nessuna di esse ti farà guadagnare uno stipendio. Tutte, praticate per dieci minuti al giorno, riorganizzeranno una piccola porzione del tuo sistema nervoso nel giro di una stagione.",
+  invocation:
+    "Leggi l'articolo. Esegui la calibrazione. Lascia che il corpo impari ciò che il corpo impara. Torna alla pagina solo dopo aver praticato.",
+  attribution:
+    "Compilato nella primavera del MMXXVI, dietro i manuali di Erasmo, i taccuini di Leonardo, i protocolli di Anders Ericsson, le marginalia di Italo Calvino — e la pazienza delle proprie mani.",
+  categories: {
+    mind:  "della mente",
+    eye:   "dell'occhio",
+    ear:   "dell'orecchio",
+    voice: "della voce",
+    hand:  "della mano",
+    body:  "del corpo"
+  }
+};
+
+/* Italian skill text — titles, units, placeholders.
+   Bodies (description, origin, protocol, marginalia, warning) are
+   added in the next commit. Until then, those fall back to English. */
+
 window.SKILL_TEXT.it = {
-  "mental-mult": {}, "major-system": {}, "doomsday": {}, "one-minute": {},
-  "clock-read": {}, "pitch-intervals": {}, "reading-pace": {},
-  "freehand-circle": {}, "bowline": {}, "riffle-shuffle": {},
-  "knuckle-roll": {}, "plank": {}, "breath-hold": {}, "paper-throw": {},
-  "italic-hand": {}, "needle-thread": {}, "pen-spin": {}
+  "mental-mult": {
+    title: "La Moltiplicazione Mentale di Numeri a Due Cifre",
+    unit: "secondi per cinque problemi"
+  },
+  "major-system": {
+    title: "Il Sistema di Major per Memorizzare le Cifre",
+    unit: "cifre ricordate (su dieci)"
+  },
+  "doomsday": {
+    title: "Il Giorno della Settimana di una Data Qualunque",
+    unit: "corrette in sessanta secondi"
+  },
+  "one-minute": {
+    title: "La Stima di un Minuto a Sensazione",
+    unit: "secondi di errore"
+  },
+  "clock-read": {
+    title: "La Lettura Veloce del Quadrante Analogico",
+    unit: "secondi per dieci quadranti"
+  },
+  "pitch-intervals": {
+    title: "Il Riconoscimento degli Intervalli Musicali",
+    unit: "corretti su dieci"
+  },
+  "reading-pace": {
+    title: "La Lettura ad Alta Voce a Duecento Parole al Minuto",
+    unit: "parole al minuto"
+  },
+  "freehand-circle": {
+    title: "Il Cerchio a Mano Libera",
+    unit: "autovalutazione, da zero a dieci"
+  },
+  "bowline": {
+    title: "Il Nodo Bolina del Marinaio",
+    unit: "secondi, a occhi chiusi",
+    placeholder: "es. 6.5"
+  },
+  "riffle-shuffle": {
+    title: "Il Mischio a Pioggia",
+    unit: "mischi puliti su venti",
+    placeholder: "0–20"
+  },
+  "knuckle-roll": {
+    title: "La Camminata della Moneta sulle Nocche",
+    unit: "rotazioni in trenta secondi",
+    placeholder: "es. 24"
+  },
+  "plank": {
+    title: "La Tenuta del Plank",
+    unit: "secondi tenuti",
+    placeholder: "es. 90"
+  },
+  "breath-hold": {
+    title: "L'Apnea Statica a Secco",
+    unit: "secondi tenuti",
+    placeholder: "es. 75"
+  },
+  "paper-throw": {
+    title: "Il Tiro della Pagina Accartocciata",
+    unit: "centri su dieci tentativi",
+    placeholder: "0–10"
+  },
+  "italic-hand": {
+    title: "La Scrittura Corsiva Italica",
+    unit: "leggibilità autovalutata, da zero a dieci",
+    placeholder: "il tuo verdetto"
+  },
+  "needle-thread": {
+    title: "Infilare l'Ago",
+    unit: "secondi al primo infilato",
+    placeholder: "es. 4.2"
+  },
+  "pen-spin": {
+    title: "La Rotazione della Penna Attorno al Pollice",
+    unit: "rotazioni in trenta secondi",
+    placeholder: "es. 18"
+  }
 };
