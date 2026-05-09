@@ -1,0 +1,11 @@
+{
+  "name": "skillapp",
+  "version": "0.1.0",
+  "description": "A Codex of Minor Arts — a typographic field manual for the deliberate practice of small, specific human skills.",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 4173"
+  },
+  "homepage": "https://www.alessandropezzali.it/skillapp/",
+  "license": "MIT"
+}

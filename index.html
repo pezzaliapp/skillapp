@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f0e7d2" />
+<title>SKILLAPP — A Codex of Minor Arts</title>
+<meta name="description" content="A typographic field manual for the deliberate practice of small, specific human skills." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app" class="loading">
+  <header class="masthead">
+    <div class="masthead-row">
+      <span class="masthead-mark">SKILLAPP</span>
+      <span class="masthead-edition">ed. MMXXVI</span>
+    </div>
+    <div class="masthead-row">
+      <span class="masthead-sub">A Codex of Minor Arts</span>
+      <span class="masthead-folio" id="folio">fol. —</span>
+    </div>
+    <hr class="masthead-rule double" />
+  </header>
+
+  <main id="view"></main>
+
+  <nav class="navbar" id="navbar">
+    <a href="#codex" data-route="codex">codex</a>
+    <a href="#ledger" data-route="ledger">ledger</a>
+    <a href="#rite" data-route="rite">daily rite</a>
+    <a href="#colophon" data-route="colophon">colophon</a>
+  </nav>
+
+  <footer class="colophon-foot">
+    <hr class="masthead-rule double" />
+    <div class="foot-row">
+      <span>impressum: a private printing</span>
+      <span class="foot-page" id="pageNum">— · —</span>
+    </div>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
